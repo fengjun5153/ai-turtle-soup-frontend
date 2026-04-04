@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run build --workspace=client",
-  "outputDirectory": "packages/client/dist",
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
