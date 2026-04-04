@@ -1,0 +1,10 @@
+{
+  "name": "@fog-of-truth/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/types.ts",
+  "types": "src/types.ts",
+  "scripts": {
+    "build": "node -e \"process.exit(0)\""
+  }
+}
