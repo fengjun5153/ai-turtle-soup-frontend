@@ -7,6 +7,6 @@
     "dev:client": "npm run dev --workspace=packages/client",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "build": "npm run build --workspaces",
-    "build:vercel": "npm run build --workspace=client && rm -rf dist && cp -R packages/client/dist dist"
+    "build:vercel": "npm run build -w packages/client && node scripts/copy-client-dist.cjs"
   }
 }
