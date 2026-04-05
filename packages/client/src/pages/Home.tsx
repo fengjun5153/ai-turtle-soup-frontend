@@ -1,7 +1,11 @@
 import GameCard from '../components/Shared/GameCard';
+import LanguageSwitcher from '../components/Shared/LanguageSwitcher';
 import { stories } from '../data/stories';
+import { useI18n } from '../i18n/useI18n';
 
 export default function Home() {
+  const { t } = useI18n();
+
   return (
     <div className="relative min-h-dvh overflow-x-hidden bg-slate-950/45 text-slate-100">
       {/* 氛围：暗角与微弱金雾 */}
@@ -15,26 +19,28 @@ export default function Home() {
       />
 
       <div className="relative z-10 flex min-h-screen flex-col">
-        <header className="border-b border-slate-800/80 px-4 py-10 text-center shadow-lg shadow-black/20 sm:px-6 sm:py-14">
+        <header className="relative border-b border-slate-800/80 px-4 py-10 text-center shadow-lg shadow-black/20 sm:px-6 sm:py-14">
+          <div className="absolute right-3 top-3 sm:right-5 sm:top-5">
+            <LanguageSwitcher />
+          </div>
           <p className="mb-2 font-mono text-xs uppercase tracking-[0.35em] text-amber-500/70">
-            The Fog of Truth
+            {t('home.tagline')}
           </p>
           <h1 className="text-4xl font-bold tracking-tight text-white drop-shadow-md sm:text-5xl md:text-6xl">
-            <span className="text-amber-400">AI海龟汤</span>
+            <span className="text-amber-400">{t('home.title')}</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
-            向守密人提出只能回答「是」「否」或「无关」的问题，在迷雾中拼凑线索，直到真相浮出水面——
-            或永远沉入黑暗。
+            {t('home.intro')}
           </p>
         </header>
 
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 sm:py-12">
           <div className="mb-8 flex flex-col gap-2 border-l-2 border-amber-500/40 pl-4 sm:pl-5">
             <h2 className="text-xl font-semibold text-slate-100 sm:text-2xl">
-              谜题馆藏
+              {t('home.sectionTitle')}
             </h2>
             <p className="max-w-2xl text-sm text-slate-500 sm:text-base">
-              任选一则汤面进入对局。难度越高，拨开迷雾所需的线索越多。
+              {t('home.sectionDesc')}
             </p>
           </div>
 
@@ -46,7 +52,7 @@ export default function Home() {
         </main>
 
         <footer className="border-t border-slate-800/80 px-4 py-8 text-center text-xs text-slate-600 sm:text-sm">
-          <span className="text-slate-500">真相迷雾</span>
+          <span className="text-slate-500">{t('home.footerBrand')}</span>
           {' · '}
           &copy; {new Date().getFullYear()}
         </footer>

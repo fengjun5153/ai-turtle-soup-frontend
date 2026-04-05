@@ -1,0 +1,73 @@
+/** English UI copy (same shape as zhLocale) */
+export const enLocale = {
+  common: {
+    language: 'Language',
+    switchToZh: '中文',
+    switchToEn: 'English',
+  },
+  home: {
+    tagline: 'The Fog of Truth',
+    title: 'AI Lateral Thinking',
+    intro:
+      'Ask the keeper only yes / no / irrelevant questions, piece together clues in the fog until the truth surfaces—or sinks forever.',
+    sectionTitle: 'Story Library',
+    sectionDesc:
+      'Pick a premise to start. Higher difficulty needs more evidence before the picture clears.',
+    footerBrand: 'Fog of Truth',
+  },
+  game: {
+    notFound: 'Story not found',
+    notFoundHint: 'Choose a story from the lobby to begin.',
+    backLobby: 'Back to lobby',
+    lobby: '← Lobby',
+    playing: 'In progress',
+    ended: 'Ended',
+    surface: 'Premise',
+    reasoning: 'Deduction',
+    endGame: 'End game',
+    revealTruth: 'Reveal solution',
+  },
+  result: {
+    notFound: 'Result not found',
+    backLobby: 'Back to lobby',
+    archive: 'Archive',
+    tagline: 'Case closed—the truth is laid bare.',
+    truthTitle: 'Full solution',
+    chatReplay: 'Chat recap',
+    you: 'You',
+    keeper: 'Keeper',
+    playAgain: 'Play again',
+  },
+  chat: {
+    errorTitle: 'Something went wrong',
+    retryLast: 'Retry last question',
+    dismiss: 'Dismiss',
+    endedEmpty: 'Game ended',
+    startPrompt: 'Ask your first question',
+    endedHint: 'View the solution or return to the lobby for a new round.',
+    startHint:
+      'Try motives, identities, places, or timing. The keeper answers only yes / no / irrelevant.',
+    keeper: 'Keeper',
+    thinking: 'Thinking...',
+    inputLabel: 'Your question',
+    placeholderEnded: 'Game ended',
+    placeholderAsk: 'Type your question… (Enter to send, Shift+Enter for newline)',
+    sending: 'Sending...',
+    send: 'Send',
+    errorNetworkPrefix: 'Could not get a reply: ',
+  },
+  difficulty: {
+    easy: 'Easy',
+    normal: 'Normal',
+    hard: 'Hard',
+  },
+  errors: {
+    EMPTY_QUESTION: 'Question cannot be empty',
+    TIMEOUT: 'AI request timed out',
+    NETWORK: 'Network error—could not reach the AI service',
+    INVALID_JSON: 'AI response was not valid JSON (HTTP {{status}})',
+    API_ERROR: 'AI API error: {{detail}}',
+    EMPTY_ANSWER: 'AI returned an empty answer',
+    GENERIC: 'Service unavailable. Check your connection and try again.',
+  },
+} as const;

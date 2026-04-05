@@ -2,6 +2,7 @@
  * 内置海龟汤题库（汤面 surface / 汤底 bottom）
  * id 须与后端 stories.json / GET /api/stories 一致；聊天判定只传 storyId，不提交汤底。
  * bottom 仅用于本地「查看汤底」结果页；若你希望生产环境完全不打包汤底，可改为从后端拉取再展示。
+ * titleEn / surfaceEn / bottomEn 供英文界面展示，不影响后端 storyId。
  */
 
 /** 难度：影响证据阈值与提示强度（与游戏状态机一致） */
@@ -17,6 +18,9 @@ export interface TTurtleSoupStory {
   bottom: string;
   evidenceThreshold?: number;
   tags?: string[];
+  titleEn?: string;
+  surfaceEn?: string;
+  bottomEn?: string;
 }
 
 export const stories: readonly TTurtleSoupStory[] = [
@@ -28,6 +32,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '一个男人在大雨中站着，身旁地上有一把完好的雨伞，他却始终没有把伞打开。',
     bottom:
       '男人是盲人，感觉不到下雨，也不知道旁边有一把伞——那把伞是别人遗落在此的，与他无关。',
+    titleEn: 'Man in the Rain',
+    surfaceEn:
+      'A man stands in heavy rain. A perfectly good umbrella lies on the ground beside him, yet he never opens it.',
+    bottomEn:
+      'The man is blind—he cannot feel the rain and does not know an umbrella is there. It was left by someone else and has nothing to do with him.',
   },
   {
     id: 'builtin-002',
@@ -37,6 +46,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '一名宇航员独自漂浮在太空中，望着舷窗外的地球，微笑着关掉了求救信号。',
     bottom:
       '他得知地球刚刚爆发了足以灭绝人类的灾难，亲人和熟悉的世界已不复存在。他不愿再回到那个只剩废墟与绝望的星球，选择在寂静的太空里结束求救，与这片星空为伴。',
+    titleEn: 'The Last Signal',
+    surfaceEn:
+      'An astronaut floats alone in space, gazes at Earth through the window, and calmly switches off the distress signal.',
+    bottomEn:
+      'He learned Earth had just been struck by a civilization-ending disaster—everyone and everything he knew was gone. He chose not to return to a ruined, hopeless world, ending the call in the silence of space among the stars.',
   },
   {
     id: 'builtin-003',
@@ -46,6 +60,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '某人每天上班乘电梯到自己的楼层；晴天时他会在中途某层下电梯，再走楼梯上去。只有下雨天，他才会一路乘电梯直达。',
     bottom:
       '他个子很矮，独自够不到高层按钮，只能按到有人进出的低层再爬楼梯。雨天他会带长柄伞，用伞尖才能按到自己要去的楼层。',
+    titleEn: 'The Tenth-Floor Elevator',
+    surfaceEn:
+      'Someone rides the elevator to work every day. On sunny days they get off partway and take the stairs the rest of the way. Only on rainy days do they ride the elevator all the way up.',
+    bottomEn:
+      'They are very short and cannot reach the high buttons alone—only floors where others enter. On rainy days they carry a long umbrella and use the tip to press their floor.',
   },
   {
     id: 'builtin-004',
@@ -55,6 +74,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '一具尸体躺在沙漠中央，身边散落着打开的行李箱和半根火柴。周围没有脚印延伸向远方。',
     bottom:
       '他与同伴乘热气球穿越沙漠，超载即将坠毁。大家扔掉行李仍不够，便抽签决定谁跳下去——抽中的签是半根火柴。他抽中最短的那根，跳下了热气球。',
+    titleEn: 'Luggage in the Desert',
+    surfaceEn:
+      'A body lies in the middle of the desert beside an open suitcase and half a matchstick. No footprints lead away into the distance.',
+    bottomEn:
+      'He crossed the desert in a hot air balloon with others; it was overweight and about to crash. They drew lots with half a matchsticks—whoever drew the shortest jumped. He drew the shortest and leapt.',
   },
   {
     id: 'builtin-005',
@@ -64,6 +88,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '一个人在餐厅点了一碗海龟汤，尝了一口后突然冲出店外，结束了自己的生命。',
     bottom:
       '他曾与同伴海难漂流，同伴「割肉」给他充饥，他活了下来却一直愧疚。多年后在这家餐厅喝到真正的海龟汤，发现味道与当年完全不同，才意识到当时吃的并不是海龟，而是同伴的身体。',
+    titleEn: 'Sea Turtle Soup',
+    surfaceEn:
+      'In a restaurant someone orders sea turtle soup, tastes one spoonful, rushes outside, and takes their own life.',
+    bottomEn:
+      'After a shipwreck, a companion “fed” him meat to survive; he lived with guilt for years. Years later real turtle soup tasted nothing like that memory—he realized he had not eaten turtle at sea, but his companion.',
   },
   {
     id: 'builtin-n06',
@@ -75,6 +104,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '周一清晨，饲养员打开猛兽区，发现所有笼舍都空了，地面干干净净，昨夜监控正好检修。园长却在办公室淡定喝咖啡。',
     bottom:
       '周日是全园动物防疫转运日，猛兽被临时移到后场检疫区，笼舍冲洗消毒，监控按计划停机维护。新员工没看交接公告，虚惊一场。',
+    titleEn: 'Empty Cages at Dawn',
+    surfaceEn:
+      'Monday morning the keeper opens the predator zone: every enclosure is empty, the ground spotless, and overnight CCTV was under maintenance. The zoo director calmly drinks coffee in the office.',
+    bottomEn:
+      'Sunday was the scheduled vaccination and transfer day—animals were moved to the quarantine wing, enclosures washed, and cameras taken offline per plan. A new hire missed the handover note; it was a false alarm.',
   },
   {
     id: 'builtin-n07',
@@ -86,6 +120,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '过山车爬到最高点突然停住，车上游客一片安静，下面的工作人员却齐齐松了口气。',
     bottom:
       '这是在拍影视素材，车上的「游客」都是演员，停车是导演要的定格镜头；工作人员怕的是真故障，确认是拍摄调度后才放心。',
+    titleEn: 'Freeze at the Crest',
+    surfaceEn:
+      'A roller coaster stops dead at the top. The riders sit in silence while staff below all exhale in relief.',
+    bottomEn:
+      'They were filming; the “guests” were actors and the pause was a scripted freeze-frame. Crew feared a real fault—once they knew it was the shoot, they relaxed.',
   },
   {
     id: 'builtin-n08',
@@ -97,6 +136,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '邮差坚持把信塞进一栋已拆迁、只剩门牌和旧信箱的工地围栏。路人觉得诡异报了警，警察却协助他完成投递。',
     bottom:
       '老屋属文保「原址迁建」，法律文书仍认可该信箱为有效送达地址。邮差按法院专递要求留痕，警察在场是见证程序合法。',
+    titleEn: 'Letter to an Empty House',
+    surfaceEn:
+      'A carrier insists on delivering mail into a mailbox on a demolition site—only a number plate and old box remain on the fence. Bystanders call the police, who help finish the delivery.',
+    bottomEn:
+      'The heritage building was relocated on-site; legally the mailbox still counts for service of process. The carrier followed court courier rules; police witnessed due process.',
   },
   {
     id: 'builtin-n09',
@@ -108,6 +152,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '生日派对上蛋糕完整摆在桌心，蜡烛吹灭后，小寿星却大哭说有人偷吃了她的愿望。',
     bottom:
       '蛋糕上只有一颗糖做的「许愿星」。弟弟趁大家唱歌时偷偷舔化了糖星，蛋糕体没被动过。孩子说的「愿望」指的是那颗糖。',
+    titleEn: 'The Missing Wish Star',
+    surfaceEn:
+      'At a birthday party the cake sits untouched in the center. After the candles go out, the child sobs that someone “ate her wish.”',
+    bottomEn:
+      'The cake had only one sugar “wish star.” Her little brother licked it away while everyone sang—the sponge was untouched. “Wish” meant the candy star.',
   },
   {
     id: 'builtin-n10',
@@ -119,6 +168,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '游客对着千年古树拍照，无线耳机里突然传出细语，景区当天就封锁了那片林子。',
     bottom:
       '景区新装的蓝牙 AR 导览串频，耳机误连了隔壁展区的语音包。封锁是为了排查设备、避免「闹鬼」谣言扩散，并非真有灵异。',
+    titleEn: 'Whispers by the Ancient Tree',
+    surfaceEn:
+      'A tourist photographs an ancient tree; wireless earbuds suddenly play whispers. The park closes that grove the same day.',
+    bottomEn:
+      'New Bluetooth AR guides crosstalked; the buds paired with another zone’s audio pack. The closure was to fix gear and stop “haunting” rumors—not the supernatural.',
   },
   {
     id: 'builtin-n11',
@@ -130,6 +184,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '目击者一口咬定肇事车是蓝色，道路监控里同一辆车却是红色，法官仍采信了目击证词。',
     bottom:
       '事发在钠灯照明的路段，红色车漆在强黄光下泛出明显的蓝紫偏色；法官结合漆面反光实验与其它物证，认定监控色彩失真，目击者方向判断无误。',
+    titleEn: 'The Blue Car Mystery',
+    surfaceEn:
+      'A witness swears the hit-and-run car was blue, yet traffic cameras show the same car as red. The judge still credits the witness.',
+    bottomEn:
+      'Under sodium lamps, red paint skews blue-violet. With reflectance tests and other evidence, the court found the footage color-unreliable and the witness’s judgment sound.',
   },
   {
     id: 'builtin-n12',
@@ -141,6 +200,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '钢琴家演奏会弹到一半突然合上琴盖、起身离场，观众却起立鼓掌久久不散。',
     bottom:
       '当晚曲目单最后一首是约定的先锋互动作品：以「砸合琴盖」作为终章动作，象征打破古典范式。懂行的观众在完成仪式后鼓掌，并非演出事故。',
+    titleEn: 'Slam, Exit, Ovation',
+    surfaceEn:
+      'Mid-recital a pianist slams the lid shut and walks off—yet the audience rises in prolonged applause.',
+    bottomEn:
+      'The final piece was an agreed avant-garde ritual: slamming the lid as the closing gesture, breaking classical form. Informed listeners applauded the finale—not an accident.',
   },
   {
     id: 'builtin-n13',
@@ -152,6 +216,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '她住在二十层，每晚回家进电梯却都只按到十八层，再走两层楼梯。',
     bottom:
       '大厦十八层以上需业主门禁卡才能按亮。她是租客，二房东只给她开通到十八层的电梯权限，剩下两层只能走消防楼梯上去。',
+    titleEn: 'Always Stopping at 18',
+    surfaceEn:
+      'She lives on the 20th floor but every night she only rides the elevator to the 18th, then walks two flights up.',
+    bottomEn:
+      'Floors above 18 need an owner key fob to select. As a subtenant she only had access to 18—she took the stairs for the last two.',
   },
   {
     id: 'builtin-n14',
@@ -163,6 +232,11 @@ export const stories: readonly TTurtleSoupStory[] = [
       '父亲葬礼后，儿子收到父亲生前预约寄出的一封信，读完立刻订了出国的机票，母亲却一点也不意外。',
     bottom:
       '信里是父亲写的「遗愿清单」：希望儿子替他去年轻时失约的异国故友墓前道一声歉。母亲早就知道遗嘱与定时邮件的安排。',
+    titleEn: "Father's Second Letter",
+    surfaceEn:
+      'After his father’s funeral, the son receives a letter scheduled before death, books an overseas flight at once—his mother is not surprised at all.',
+    bottomEn:
+      'The letter held a “bucket list” wish: visit an old friend’s grave abroad to apologize for a broken promise long ago. His mother already knew about the will and timed mail.',
   },
 ] as const satisfies readonly TTurtleSoupStory[];
 

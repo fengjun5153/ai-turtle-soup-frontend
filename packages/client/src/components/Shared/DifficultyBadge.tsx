@@ -1,7 +1,9 @@
-const CONFIG: Record<string, { label: string; className: string }> = {
-  easy: { label: '简单', className: 'bg-emerald-500/20 text-emerald-400' },
-  normal: { label: '普通', className: 'bg-amber-500/20 text-amber-400' },
-  hard: { label: '困难', className: 'bg-red-500/20 text-red-400' },
+import { useI18n } from '../../i18n/useI18n';
+
+const STYLE: Record<string, { className: string }> = {
+  easy: { className: 'bg-emerald-500/20 text-emerald-400' },
+  normal: { className: 'bg-amber-500/20 text-amber-400' },
+  hard: { className: 'bg-red-500/20 text-red-400' },
 };
 
 interface Props {
@@ -9,7 +11,9 @@ interface Props {
 }
 
 export default function DifficultyBadge({ difficulty }: Props) {
-  const { label, className } = CONFIG[difficulty] ?? CONFIG.normal;
+  const { t } = useI18n();
+  const { className } = STYLE[difficulty] ?? STYLE.normal;
+  const label = t(`difficulty.${difficulty}`);
 
   return (
     <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${className}`}>

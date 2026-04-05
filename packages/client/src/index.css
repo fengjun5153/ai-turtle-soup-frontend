@@ -1,21 +1,133 @@
 @import "tailwindcss";
 
+/* 闪烁幅度约 2×：更低谷值、更高峰值、更大缩放与光晕 */
 @keyframes star-twinkle {
   0%,
   100% {
-    opacity: 0.12;
-    transform: scale(0.65);
-    box-shadow: 0 0 2px rgba(226, 232, 240, 0.25);
+    opacity: 0.05;
+    transform: scale(0.48);
+    box-shadow: 0 0 5px rgba(226, 232, 240, 0.35);
   }
   45% {
-    opacity: 0.95;
-    transform: scale(1);
-    box-shadow: 0 0 6px rgba(251, 191, 36, 0.35), 0 0 10px rgba(226, 232, 240, 0.2);
+    opacity: 1;
+    transform: scale(1.38);
+    box-shadow:
+      0 0 14px rgba(251, 191, 36, 0.55),
+      0 0 22px rgba(226, 232, 240, 0.45),
+      0 0 32px rgba(251, 191, 36, 0.2);
   }
   55% {
-    opacity: 0.85;
-    transform: scale(0.92);
-    box-shadow: 0 0 4px rgba(226, 232, 240, 0.45);
+    opacity: 0.92;
+    transform: scale(1.12);
+    box-shadow: 0 0 10px rgba(226, 232, 240, 0.65);
+  }
+}
+
+/* 海龟寻汤底：2 分钟从左爬到右，线性循环 */
+@keyframes turtle-hunt-left {
+  from {
+    left: 0.5rem;
+  }
+  to {
+    /* 停在汤碗左侧，避免与右侧碗图标重叠 */
+    left: calc(100% - 5.25rem);
+  }
+}
+
+.turtle-soup-hunt-runner {
+  animation: turtle-hunt-left 120s linear infinite;
+  will-change: left;
+}
+
+/* 海龟整体：极轻起伏，慢爬感（不做大跳、不挤压缩放） */
+@keyframes turtle-walk-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-1.5px) rotate(0.6deg);
+  }
+}
+
+.turtle-soup-hunt-sprite {
+  transform-origin: 55% 88%;
+  animation: turtle-walk-bob 2.8s ease-in-out infinite;
+}
+
+/* 腿部：微摆，节奏放慢 */
+@keyframes turtle-leg-rear {
+  0%,
+  100% {
+    transform: rotate(-2.5deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes turtle-leg-front {
+  0%,
+  100% {
+    transform: rotate(3.5deg);
+  }
+  50% {
+    transform: rotate(-2.5deg);
+  }
+}
+
+.turtle-svg-legs-rear {
+  transform-origin: 20px 32px;
+  animation: turtle-leg-rear 1.85s ease-in-out infinite;
+}
+
+.turtle-svg-legs-front {
+  transform-origin: 52px 32px;
+  animation: turtle-leg-front 1.85s ease-in-out infinite;
+}
+
+/* 头部：轻微探头，很慢 */
+@keyframes turtle-head-nod {
+  0%,
+  100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.turtle-svg-head {
+  transform-origin: 50px 18px;
+  animation: turtle-head-nod 3.4s ease-in-out infinite;
+}
+
+/* 偶发眨眼 */
+@keyframes turtle-blink {
+  0%,
+  44%,
+  48%,
+  100% {
+    transform: scaleY(1);
+  }
+  45%,
+  47% {
+    transform: scaleY(0.12);
+  }
+}
+
+.turtle-svg-eye {
+  transform-origin: 57px 14px;
+  animation: turtle-blink 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turtle-soup-hunt-sprite,
+  .turtle-svg-legs-rear,
+  .turtle-svg-legs-front,
+  .turtle-svg-head,
+  .turtle-svg-eye {
+    animation: none !important;
   }
 }
 
@@ -23,6 +135,17 @@
   animation-name: star-twinkle;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+}
+
+/* 装饰层：子元素默认会恢复 pointer-events，需整棵子树都关掉才能点到下层表单 */
+.starry-sky-layer,
+.starry-sky-layer * {
+  pointer-events: none;
+}
+
+.turtle-banner-layer,
+.turtle-banner-layer * {
+  pointer-events: none;
 }
 
 body {

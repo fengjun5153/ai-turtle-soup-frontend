@@ -1,4 +1,5 @@
 import type { TTurtleSoupStory } from './data/stories';
+import type { TLocale } from './i18n/types';
 
 /** 与题库条目一致的故事类型（函数签名沿用 Story 命名） */
 export type Story = TTurtleSoupStory;
@@ -36,24 +37,46 @@ interface TBackendChatResponse {
   };
 }
 
-export class AskAIError extends Error {
-  readonly statusCode?: number;
+/** 供 UI 映射本地化文案；message 保留中文便于日志与调试 */
+export type TAskAIErrorCode =
+  | 'EMPTY_QUESTION'
+  | 'TIMEOUT'
+  | 'NETWORK'
+  | 'INVALID_JSON'
+  | 'API_ERROR'
+  | 'EMPTY_ANSWER';
 
-  constructor(message: string, statusCode?: number, options?: { cause?: unknown }) {
-    super(message, options);
+export class AskAIError extends Error {
+  readonly code: TAskAIErrorCode;
+  readonly statusCode?: number;
+  readonly detail?: string;
+
+  constructor(
+    code: TAskAIErrorCode,
+    message: string,
+    options?: { statusCode?: number; detail?: string; cause?: unknown },
+  ) {
+    super(message, options?.cause !== undefined ? { cause: options.cause } : undefined);
     this.name = 'AskAIError';
-    this.statusCode = statusCode;
+    this.code = code;
+    this.statusCode = options?.statusCode;
+    this.detail = options?.detail;
   }
 }
 
 /**
  * 调用大模型进行海龟汤「是/否/无关」判定。
  * 前后端分离：统一调用后端 /api/chat。
+ * @param locale 与界面语言一致，供后端返回对应语言（避免仅靠问题正文误判 en/zh）。
  */
-export async function askAI(question: string, story: Story): Promise<string> {
+export async function askAI(
+  question: string,
+  story: Story,
+  locale: TLocale,
+): Promise<string> {
   const q = question.trim();
   if (!q) {
-    throw new AskAIError('提问不能为空');
+    throw new AskAIError('EMPTY_QUESTION', '提问不能为空');
   }
 
   const base =
@@ -62,6 +85,7 @@ export async function askAI(question: string, story: Story): Promise<string> {
   const requestPayload = {
     question: q,
     storyId: story.id,
+    locale: locale === 'en' ? 'en' : 'zh',
   };
 
   chatDebugLog('request:start', { url, payload: requestPayload });
@@ -84,12 +108,12 @@ export async function askAI(question: string, story: Story): Promise<string> {
       storyId: story.id,
     });
     if (e instanceof DOMException && e.name === 'AbortError') {
-      throw new AskAIError('AI 请求超时', undefined, { cause: e });
+      throw new AskAIError('TIMEOUT', 'AI 请求超时', { cause: e });
     }
     throw new AskAIError(
+      'NETWORK',
       e instanceof Error ? e.message : '网络错误，无法连接 AI 服务',
-      undefined,
-      { cause: e },
+      { cause: e, detail: e instanceof Error ? e.message : undefined },
     );
   } finally {
     clearTimeout(timer);
@@ -102,8 +126,9 @@ export async function askAI(question: string, story: Story): Promise<string> {
   } catch {
     chatDebugLog('response:invalid_json', { status: res.status });
     throw new AskAIError(
+      'INVALID_JSON',
       `AI 响应不是合法 JSON（HTTP ${res.status}）`,
-      res.status,
+      { statusCode: res.status },
     );
   }
 
@@ -120,7 +145,10 @@ export async function askAI(question: string, story: Story): Promise<string> {
       message: msg,
       storyId: story.id,
     });
-    throw new AskAIError(`AI 接口错误：${msg}`, res.status);
+    throw new AskAIError('API_ERROR', `AI 接口错误：${msg}`, {
+      statusCode: res.status,
+      detail: msg,
+    });
   }
 
   const nested =
@@ -137,7 +165,7 @@ export async function askAI(question: string, story: Story): Promise<string> {
 
   if (!text) {
     chatDebugLog('response:empty_text', { storyId: story.id, body: data });
-    throw new AskAIError('AI 返回内容为空');
+    throw new AskAIError('EMPTY_ANSWER', 'AI 返回内容为空');
   }
 
   chatDebugLog('response:success', {

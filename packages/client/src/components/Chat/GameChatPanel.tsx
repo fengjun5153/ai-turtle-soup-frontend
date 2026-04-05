@@ -7,6 +7,8 @@ import {
 } from 'react';
 import { askAI, AskAIError } from '../../api';
 import type { TTurtleSoupStory } from '../../data/stories';
+import type { TTFunction } from '../../i18n/context';
+import { useI18n } from '../../i18n/useI18n';
 import LoadingDots from '../Shared/LoadingDots';
 
 interface GameChatPanelProps {
@@ -26,20 +28,33 @@ function newId(): string {
   return crypto.randomUUID();
 }
 
-function toFriendlyError(e: unknown): string {
+function friendlyAskAIError(e: AskAIError, t: TTFunction): string {
+  if (e.code === 'INVALID_JSON') {
+    return t('errors.INVALID_JSON', { status: String(e.statusCode ?? '') });
+  }
+  if (e.code === 'API_ERROR') {
+    const detail =
+      e.detail ?? e.message.replace(/^AI 接口错误：/, '').replace(/^AI API error:\s*/i, '');
+    return t('errors.API_ERROR', { detail });
+  }
+  return t(`errors.${e.code}`);
+}
+
+function toFriendlyError(e: unknown, t: TTFunction): string {
   if (e instanceof AskAIError) {
-    return e.message;
+    return friendlyAskAIError(e, t);
   }
   if (e instanceof Error) {
-    return `暂时无法获取回答：${e.message}`;
+    return `${t('chat.errorNetworkPrefix')}${e.message}`;
   }
-  return '服务暂时不可用，请检查网络后重试。';
+  return t('errors.GENERIC');
 }
 
 const ENABLE_CHAT_DEBUG =
   import.meta.env.DEV || import.meta.env.VITE_DEBUG_CHAT === 'true';
 
 export default function GameChatPanel({ story, disabled = false }: GameChatPanelProps) {
+  const { locale, t } = useI18n();
   const [messages, setMessages] = useState<TChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +62,11 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
   const listEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
-    listEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    listEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'nearest',
+    });
   }, []);
 
   useEffect(() => {
@@ -77,7 +96,7 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
     setIsLoading(true);
 
     try {
-      const answer = await askAI(text, story);
+      const answer = await askAI(text, story, locale);
       if (ENABLE_CHAT_DEBUG) {
         console.log('[chat-ui] receive', {
           storyId: story.id,
@@ -95,11 +114,11 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
           error: e instanceof Error ? e.message : e,
         });
       }
-      setErrorHint(toFriendlyError(e));
+      setErrorHint(toFriendlyError(e, t));
     } finally {
       setIsLoading(false);
     }
-  }, [draft, isLoading, story, disabled]);
+  }, [draft, isLoading, story, disabled, locale, t]);
 
   const retryLastQuestion = useCallback(() => {
     if (isLoading || disabled || messages.length === 0) return;
@@ -123,7 +142,7 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
           className="mx-3 mt-3 rounded-lg border border-red-500/30 bg-red-950/40 px-3 py-2 text-sm text-red-200 transition-all duration-200"
           role="alert"
         >
-          <p className="font-medium text-red-100">出错了，请稍后重试</p>
+          <p className="font-medium text-red-100">{t('chat.errorTitle')}</p>
           <p className="mt-1 text-red-200/90">{errorHint}</p>
           <div className="mt-2 flex gap-2">
             <button
@@ -132,14 +151,14 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
               disabled={isLoading || disabled}
               className="rounded-lg border border-red-300/30 px-2.5 py-1 text-xs text-red-100 transition-colors hover:bg-red-900/40 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              重试上一条
+              {t('chat.retryLast')}
             </button>
             <button
               type="button"
               onClick={() => setErrorHint(null)}
               className="rounded-lg border border-red-300/20 px-2.5 py-1 text-xs text-red-200 transition-colors hover:bg-red-900/30"
             >
-              关闭
+              {t('chat.dismiss')}
             </button>
           </div>
         </div>
@@ -149,12 +168,10 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
         {messages.length === 0 && !isLoading && (
           <div className="mx-auto max-w-md rounded-lg border border-slate-700/80 bg-slate-900/40 p-4 text-sm text-slate-400">
             <p className="text-center font-medium text-slate-300">
-              {disabled ? '游戏已结束' : '开始你的第一次提问'}
+              {disabled ? t('chat.endedEmpty') : t('chat.startPrompt')}
             </p>
             <p className="mt-2 text-center text-xs leading-6 text-slate-500">
-              {disabled
-                ? '你可以查看汤底或返回大厅开启新的一局。'
-                : '试试问身份、动机、地点、时间等关键线索。守密人只会回答「是 / 否 / 无关」。'}
+              {disabled ? t('chat.endedHint') : t('chat.startHint')}
             </p>
           </div>
         )}
@@ -173,7 +190,7 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
             >
               {m.role === 'assistant' && (
                 <p className="mb-1 text-xs font-medium text-amber-400/90">
-                  守密人
+                  {t('chat.keeper')}
                 </p>
               )}
               <p className="whitespace-pre-wrap break-words">{m.content}</p>
@@ -184,9 +201,9 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
         {isLoading && (
           <div className="flex justify-start">
             <div className="rounded-lg border border-slate-600 bg-slate-900/60 px-4 py-2.5 text-sm text-slate-400">
-              <span className="text-amber-400/80">守密人</span>
+              <span className="text-amber-400/80">{t('chat.keeper')}</span>
               <span className="ml-2 inline-flex items-center gap-2 text-slate-300">
-                思考中...
+                {t('chat.thinking')}
                 <LoadingDots />
               </span>
             </div>
@@ -196,9 +213,9 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
         <div ref={listEndRef} />
       </div>
 
-      <div className="border-t border-slate-700 bg-slate-900/50 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-4">
+      <div className="relative z-20 shrink-0 border-t border-slate-700 bg-slate-900/50 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:p-4">
         <label htmlFor="game-question" className="sr-only">
-          输入问题
+          {t('chat.inputLabel')}
         </label>
         <textarea
           id="game-question"
@@ -208,9 +225,7 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
           onKeyDown={onKeyDown}
           disabled={isLoading || disabled}
           placeholder={
-            disabled
-              ? '游戏已结束'
-              : '输入你的问题…（Enter 发送，Shift+Enter 换行）'
+            disabled ? t('chat.placeholderEnded') : t('chat.placeholderAsk')
           }
           className="mb-2 w-full resize-none rounded-lg border border-slate-600 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 transition-colors focus:border-amber-500/50 focus:outline-none focus:ring-1 focus:ring-amber-500/40 disabled:opacity-50"
         />
@@ -221,7 +236,7 @@ export default function GameChatPanel({ story, disabled = false }: GameChatPanel
             disabled={isLoading || !draft.trim() || disabled}
             className="rounded-lg bg-amber-500/90 px-4 py-2 text-sm font-medium text-slate-900 shadow-lg transition-all hover:bg-amber-400 active:scale-95 disabled:cursor-not-allowed disabled:bg-slate-600 disabled:text-slate-400"
           >
-            {isLoading ? '发送中...' : '发送'}
+            {isLoading ? t('chat.sending') : t('chat.send')}
           </button>
         </div>
       </div>

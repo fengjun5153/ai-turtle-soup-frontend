@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { storyDisplayTexts } from '../../data/storyLocale';
 import type { TTurtleSoupStory } from '../../data/stories';
+import { useI18n } from '../../i18n/useI18n';
 import DifficultyBadge from './DifficultyBadge';
 
 interface GameCardProps {
@@ -12,6 +14,8 @@ interface GameCardProps {
  */
 export default function GameCard({ story }: GameCardProps) {
   const navigate = useNavigate();
+  const { locale } = useI18n();
+  const { title, surface } = storyDisplayTexts(story, locale);
 
   return (
     <button
@@ -21,12 +25,12 @@ export default function GameCard({ story }: GameCardProps) {
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-lg font-semibold text-amber-400 transition-colors group-hover:text-amber-300">
-          {story.title}
+          {title}
         </h3>
         <DifficultyBadge difficulty={story.difficulty} />
       </div>
       <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-400 transition-colors group-hover:text-slate-300">
-        {story.surface}
+        {surface}
       </p>
     </button>
   );

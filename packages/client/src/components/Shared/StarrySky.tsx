@@ -27,7 +27,7 @@ const STARS = Array.from({ length: STAR_COUNT }, () => {
 export default function StarrySky() {
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-gradient-to-b from-slate-950 via-[#0c1222] to-slate-900"
+      className="starry-sky-layer fixed inset-0 z-0 overflow-hidden bg-gradient-to-b from-slate-950 via-[#0c1222] to-slate-900"
       aria-hidden
     >
       {STARS.map((s, i) => (
