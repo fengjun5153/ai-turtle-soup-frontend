@@ -46,7 +46,7 @@ export default function Game() {
 
   if (!id || !story) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-900 px-4 text-center text-slate-300">
+      <div className="flex min-h-dvh flex-col items-center justify-center bg-slate-950/40 px-4 text-center text-slate-300">
         <p className="text-lg text-amber-400/90">未找到该谜题</p>
         <p className="mt-2 text-sm text-slate-500">
           请从大厅选择一则故事开始游戏。
@@ -62,7 +62,7 @@ export default function Game() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-900 text-slate-100">
+    <div className="flex min-h-dvh flex-col bg-slate-950/40 text-slate-100">
       <header className="flex shrink-0 items-center gap-3 border-b border-slate-800 px-4 py-3 shadow-lg">
         <Link
           to="/"
@@ -101,7 +101,7 @@ export default function Game() {
           <GameChatPanel story={story} disabled={status === 'ended'} />
         </section>
 
-        <div className="sticky bottom-0 z-10 -mx-3 flex flex-wrap justify-end gap-2 border-t border-slate-800 bg-slate-900/85 px-3 py-2 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0">
+        <div className="sticky bottom-0 z-10 -mx-3 flex flex-wrap justify-end gap-2 border-t border-slate-800 bg-slate-950/90 px-3 py-2 backdrop-blur-sm sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0">
           <button
             type="button"
             onClick={handleEndGame}

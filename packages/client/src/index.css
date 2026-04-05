@@ -1,7 +1,33 @@
 @import "tailwindcss";
 
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: scale(0.65);
+    box-shadow: 0 0 2px rgba(226, 232, 240, 0.25);
+  }
+  45% {
+    opacity: 0.95;
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(251, 191, 36, 0.35), 0 0 10px rgba(226, 232, 240, 0.2);
+  }
+  55% {
+    opacity: 0.85;
+    transform: scale(0.92);
+    box-shadow: 0 0 4px rgba(226, 232, 240, 0.45);
+  }
+}
+
+.star-dot {
+  animation-name: star-twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
 body {
   margin: 0;
+  background-color: #020617;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

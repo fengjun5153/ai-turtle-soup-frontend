@@ -26,7 +26,7 @@ export default function Result() {
 
   if (!id || !story) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-900 px-4 text-center text-slate-300">
+      <div className="flex min-h-dvh items-center justify-center bg-slate-950/40 px-4 text-center text-slate-300">
         <div>
           <p className="text-lg text-amber-400">未找到该故事结果</p>
           <Link
@@ -41,7 +41,7 @@ export default function Result() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-900 text-slate-100">
+    <div className="relative min-h-dvh overflow-hidden bg-slate-950/45 text-slate-100">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_15%,rgba(251,191,36,0.13),transparent_45%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(15,23,42,0.85),transparent_55%)]" />
 

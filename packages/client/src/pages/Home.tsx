@@ -3,7 +3,7 @@ import { stories } from '../data/stories';
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-slate-900 text-slate-100">
+    <div className="relative min-h-dvh overflow-x-hidden bg-slate-950/45 text-slate-100">
       {/* 氛围：暗角与微弱金雾 */}
       <div
         className="pointer-events-none fixed inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(251,191,36,0.08),transparent)]"
