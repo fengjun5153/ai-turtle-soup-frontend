@@ -1,6 +1,8 @@
 /**
  * 内置海龟汤题库（汤面 surface / 汤底 bottom）
- * 与 PRD「真相迷雾」玩法一致：玩家仅见 surface，bottom 仅用于 AI 裁判与揭晓。
+ * 与 PRD「真相迷雾」玩法一致：玩家仅见 surface，bottom 仅用于本地展示；AI 判定由后端按 storyId 查库。
+ *
+ * id 必须与后端 stories.json / GET /api/stories 中的 id 完全一致，否则 POST /api/chat 会报 Story not found（常见为 HTTP 404）。
  */
 
 /** 难度：影响证据阈值与提示强度（与游戏状态机一致） */
@@ -22,7 +24,7 @@ export interface TTurtleSoupStory {
 
 export const stories: readonly TTurtleSoupStory[] = [
   {
-    id: 'builtin-e01',
+    id: 'builtin-001',
     title: '雨中的男人',
     difficulty: 'easy',
     surface:
@@ -31,7 +33,7 @@ export const stories: readonly TTurtleSoupStory[] = [
       '男人是盲人，感觉不到下雨，也不知道旁边有一把伞——那把伞是别人遗落在此的，与他无关。',
   },
   {
-    id: 'builtin-n01',
+    id: 'builtin-002',
     title: '最后的信号',
     difficulty: 'normal',
     surface:
@@ -40,7 +42,7 @@ export const stories: readonly TTurtleSoupStory[] = [
       '他得知地球刚刚爆发了足以灭绝人类的灾难，亲人和熟悉的世界已不复存在。他不愿再回到那个只剩废墟与绝望的星球，选择在寂静的太空里结束求救，与这片星空为伴。',
   },
   {
-    id: 'builtin-n02',
+    id: 'builtin-003',
     title: '十楼的电梯',
     difficulty: 'normal',
     surface:
@@ -49,7 +51,7 @@ export const stories: readonly TTurtleSoupStory[] = [
       '他个子很矮，独自够不到高层按钮，只能按到有人进出的低层再爬楼梯。雨天他会带长柄伞，用伞尖才能按到自己要去的楼层。',
   },
   {
-    id: 'builtin-h01',
+    id: 'builtin-004',
     title: '沙漠里的行李',
     difficulty: 'hard',
     surface:
@@ -58,7 +60,7 @@ export const stories: readonly TTurtleSoupStory[] = [
       '他与同伴乘热气球穿越沙漠，超载即将坠毁。大家扔掉行李仍不够，便抽签决定谁跳下去——抽中的签是半根火柴。他抽中最短的那根，跳下了热气球。',
   },
   {
-    id: 'builtin-h02',
+    id: 'builtin-005',
     title: '海龟汤',
     difficulty: 'hard',
     surface:
